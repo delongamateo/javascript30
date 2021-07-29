@@ -56,14 +56,32 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-        window.addEventListener("keydown", function(e) {
-            //selecting right sound based on key pressed 
-            const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-            if(!audio) return; //stop the function if there is no sound for the key
+      function playSound(e) {
+        //selecting right sound based on key pressed
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        //selecting right div based on key pressed
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        if (!audio) return; //stop the function if there is no sound for the key
+        audio.currentTime = 0;
+        audio.play();
+        // adding class to div, highlighting when right key is pressed
+        key.classList.add("playing");
+      }
 
-            audio.play();
+      //function for removing class from div
+      function removeTransition(e) {
+        //skip element that has no transform class
+        if (e.propertyName !== "transform") return;
+        this.classList.remove("playing");
+      }
+      // selecting all elements with .key class
+      const key = document.querySelectorAll(".key");
+      // adding listeners to keys with loop
+      key.forEach((key) =>
+        key.addEventListener("transitionend", removeTransition)
+      );
 
-        });
+      window.addEventListener("keydown", playSound);
     </script>
   </body>
 </html>
