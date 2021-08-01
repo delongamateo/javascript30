@@ -1,34 +1,81 @@
-//selecting inputs
-let rock = document.querySelector(".rock");
-let paper = document.querySelector(".paper");
-let scissors = document.querySelector(".scissors");
-//keeping score
-let you = 0;
-let comp = 0;
-let result = undefined;
+//selecting needed elements
+const scoreHumanEl = document.querySelector(".score-human");
+const scoreComputerEl = document.querySelector(".score-bot");
+const choiceHumanEl = document.querySelector(".choice-human");
+const choiceComputerEl = document.querySelector(".choice-bot");
+const resultEl = document.querySelector(".result-current");
+const rock = document.querySelector(".rock");
+const paper = document.querySelector(".paper");
+const scissors = document.querySelector(".scissors");
 
+//score variables
+let scoreHuman = 0;
+let scoreComputer = 0;
+let result;
+
+//function to get random pick from computer
 function getComputerPlay() {
   const options = ["rock", "paper", "scissors"];
-
-  let pick = Math.floor(Math.random() * 3);
-  let computerPick = undefined;
-
-  if (pick == 0) {
-    computerPick = options[0];
-  } else if (pick == 1) {
-    computerPick = options[1];
-  } else {
-    computerPick = options[2];
-  }
-
-  return computerPick;
+  const computerChoice = options[Math.floor(Math.random() * options.length)];
+  return computerChoice;
 }
 
 function play(humanPlay) {
-  let computerPick = getComputerPlay();
+  //saving computer random pick
+  const computerPlay = getComputerPlay();
 
-  if (humanPlay == rock && computerPick == "paper") {
+  //logic deciding who won
+  if (humanPlay === "rock") {
+    if (computerPlay === "paper") {
+      result = "Lost";
+      scoreComputer++;
+    } else if (computerPlay === "scissors") {
+      result = "Won";
+      scoreHuman++;
+    } else {
+      result = "Tie";
+    }
+  } else if (humanPlay === "paper") {
+    if (computerPlay === "rock") {
+      result = "Won";
+      scoreHuman++;
+    } else if (computerPlay === "scissors") {
+      result = "Lost";
+      scoreComputer++;
+    } else {
+      result = "Tie";
+    }
+  } else if (humanPlay === "scissors") {
+    if (computerPlay === "rock") {
+      result = "Lost";
+      scoreComputer++;
+    } else if (computerPlay === "paper") {
+      result = "Won";
+      scoreHuman++;
+    } else {
+      result = "Tie";
+    }
+  } else {
+    return false;
   }
+
+  //display human and computer pick and score
+  scoreHumanEl.textContent = scoreHuman;
+  scoreComputerEl.textContent = scoreComputer;
+  choiceHumanEl.textContent = humanPlay;
+  choiceComputerEl.textContent = computerPlay;
+  resultEl.textContent = result;
 }
 
-rock.addEventListener("click", play);
+//event listeners for human pick
+rock.addEventListener("click", function () {
+  play("rock");
+});
+
+paper.addEventListener("click", function () {
+  play("paper");
+});
+
+scissors.addEventListener("click", function () {
+  play("scissors");
+});
